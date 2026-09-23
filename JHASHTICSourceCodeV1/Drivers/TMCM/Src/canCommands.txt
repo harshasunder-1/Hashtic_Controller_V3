@@ -1,0 +1,33 @@
+case STOP_COMMANDS:
+    
+    canSSIp.motorAction = RxData[0];
+    ss.cc_ramp = CC_RAMPDOWN;  
+      
+    if(canSSIp.motorAction == STOP_COASTING){ 
+      setStopAction(&stopC,COASTING,NO_ACTION,NOTEVER);        //coasting all the way till stop
+    }
+        
+    else if (canSSIp.motorAction == SS_STOP_REGEN){
+      setStopAction(&stopC,REGEN,COASTING,AT_300);            // regen till low speed, then coasting
+    }
+    
+    else if (canSSIp.motorAction == SS_STOP_COAST_MECH_BRAKE){                    
+      setStopAction(&stopC,COASTING,MECHBRAKE,AT_300);        // coasting and mech braking when RPM reaches threshold
+    }
+    
+    else if (canSSIp.motorAction == SS_DISENGAGE_MECHBRAKE){
+      setStopAction(&stopC,DISENGAGE_BRAKE,NO_ACTION,NOTEVER);  // disengage brake,for manual control
+    }
+    
+    else if (canSSIp.motorAction == SS_ENGAGE_MECHBRAKE){
+       setStopAction(&stopC,MECHBRAKE,NO_ACTION,NOTEVER); // engage mech Brake immediately, for manual control
+    }
+    
+    else if (canSSIp.motorAction == SS_REGEN_MECH_BRAKE){
+      setStopAction(&stopC,REGEN,MECHBRAKE,AT_300);   // regen till low speed and then mech brake
+    }
+    else{
+    }
+    
+    FDCAN_SendPCMAckMsg(1);
+    break;
